@@ -1,0 +1,38 @@
+# Core
+Django>=4.2,<5.0
+djangorestframework
+django-cors-headers
+psycopg2-binary
+Pillow
+python-decouple
+
+# Async & Queue
+celery
+redis
+channels
+daphne
+watchdog
+
+# Auth
+djangorestframework-simplejwt
+
+# AI & ML
+langchain
+langchain-google-genai
+google-generativeai
+scikit-learn
+xgboost
+pefile
+yara-python
+virustotal3
+
+# PDF
+WeasyPrint
+
+scikit-learn==1.8.0
+
+
+pandas==3.0.1
+
+psutil==5.9.8
+channels-redis==4.2.0

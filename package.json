@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.1"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "lucide-react": "^0.575.0",
+    "react-dropzone": "^15.0.0",
+    "react-router-dom": "^7.13.1",
+    "recharts": "^3.7.0",
+    "zustand": "^5.0.11"
+  }
+}

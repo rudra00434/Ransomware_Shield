@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Threat Report - {{ file_name }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #2d3748;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            color: #1a202c;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #4a5568;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2b6cb0;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .grid-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 48%;
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #4a5568;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .threat-level {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+        }
+
+        .critical {
+            background-color: #e53e3e;
+        }
+
+        /* Red */
+        .high {
+            background-color: #ed8936;
+        }
+
+        /* Orange */
+        .low {
+            background-color: #d69e2e;
+        }
+
+        /* Yellow */
+        .clean {
+            background-color: #38a169;
+        }
+
+        /* Green */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #2d3748;
+        }
+
+        .ai-box {
+            background-color: #edf2f7;
+            padding: 20px;
+            border-left: 4px solid #3182ce;
+            border-radius: 4px;
+        }
+
+        .ai-box h3 {
+            margin-top: 0;
+            color: #2c5282;
+            margin-bottom: 10px;
+        }
+
+        .ai-text {
+            font-style: italic;
+            color: #4a5568;
+            white-space: pre-wrap;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            color: #a0aec0;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1 class="title">Ransomware Shield</h1>
+        <div class="subtitle">Automated Malware & Threat Intelligence Report</div>
+    </div>
+
+    <div class="section">
+        <div class="grid-container">
+            <div class="card" style="width: 100%; text-align: center;">
+                <h3>Overall Assessment</h3>
+                <div style="margin-top: 10px;">
+                    {% if threat_level == 'CRITICAL' %}
+                    <span class="threat-level critical">CRITICAL THREAT</span>
+                    {% elif threat_level == 'HIGH' %}
+                    <span class="threat-level high">HIGH RISK</span>
+                    {% elif threat_level == 'LOW' %}
+                    <span class="threat-level low">LOW RISK / SUSPICIOUS</span>
+                    {% else %}
+                    <span class="threat-level clean">CLEAN / BENIGN</span>
+                    {% endif %}
+                </div>
+                <p style="margin-top: 10px; font-size: 16px;">Detection Score: {{ detection_count }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Target File</h3>
+                <p>{{ file_name }}</p>
+                <div style="font-size: 12px; color: #718096; margin-top: 5px; word-break: break-all;">
+                    SHA256: {{ engine_results.virustotal.file_info.sha256|default:"N/A" }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Scan Details</h3>
+                <p style="font-size: 14px; font-weight: normal;">
+                    <strong>Job ID:</strong> {{ job_id }}<br>
+                    <strong>Timestamp:</strong> {{ upload_time }}<br>
+                    <strong>Status:</strong> {{ status }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">AI Analyst Summary</h2>
+        <div class="ai-box">
+            <h3>AI Powered Analysis</h3>
+            <div class="ai-text">{{ ai_explanation }}</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Static Analysis (PE Headers)</h2>
+        <table>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Is Valid PE</td>
+                <td>{{ engine_results.static.is_pe }}</td>
+            </tr>
+            <tr>
+                <td>Overall Entropy</td>
+                <td>{{ engine_results.static.entropy|floatformat:2 }} ( > 7.0 is highly suspicious )</td>
+            </tr>
+            <tr>
+                <td>Suspicious Sections</td>
+                <td>{{ engine_results.static.suspicious_sections|length }} identified</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">VirusTotal Global Intelligence</h2>
+        <div class="grid-container">
+            <div class="card" style="width: 23%;">
+                <h3>Malicious</h3>
+                <p style="color: #e53e3e;">{{ engine_results.virustotal.malicious|default:"0" }}</p>
+            </div>
+            <div class="card" style="width: 23%;">
+                <h3>Suspicious</h3>
+                <p style="color: #ed8936;">{{ engine_results.virustotal.suspicious|default:"0" }}</p>
+            </div>
+            <div class="card" style="width: 23%;">
+                <h3>Undetected</h3>
+                <p style="color: #38a169;">{{ engine_results.virustotal.undetected|default:"0" }}</p>
+            </div>
+            <div class="card" style="width: 23%;">
+                <h3>Total Engines</h3>
+                <p>{{ engine_results.virustotal.total|default:"0" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Generated automatically by Ransomware Shield Security Pipeline.<br>
+        Document ID: {{ scan_id }} - Strictly Confidential
+    </div>
+
+</body>
+
+</html>
