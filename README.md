@@ -62,17 +62,17 @@ Real-time endpoint telemtry monitoring.
 
 | Dashboard Overview | Live Network Analysis |
 | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b" alt="Dashboard Setup"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Network+Analysis+Screenshot" alt="Network Config"> |
-| *High-level overview of threat scores and recent scans.* | *Real-time connection monitoring and ARP Spoofing alerts.* |
+| <img src="https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b" alt="Dashboard Setup"> | <img src="https://github.com/user-attachments/assets/de9d7dc5-eece-4389-9b57-d2eab098cc03" alt="Network Config"> |
+| *High-level overview of threat scores and recent scans.* | *Real-time connection monitoring.* |
 
-| AI Threat Explainer | Honeyfile Trap Alert |
+| AI Threat Explainer | Live MitM ARP Alerts |
 | :---: | :---: |
-| <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=AI+Threat+Explainer" alt="AI Explainer"> | <img src="https://placehold.co/500x300/ef4444/FFFFFF.png?text=CRITICAL:+Ransomware+Activity+Detected" alt="Honeyfile Trip"> |
-| *Llama 3 translating YARA matches into plain English.* | *Global WebSocket alert triggered when a decoy file is modified.* |
+| <img src="https://github.com/user-attachments/assets/05b18aa6-a511-4475-bd7f-712803b9b47e" alt="AI Explainer"> | <img src="https://github.com/user-attachments/assets/c528afab-58dd-4185-9a67-0c677610b784" alt="MitM ARP Spoofing Detection"> |
+| *Llama 3 functioning as a conversational security analyst.* | *Global warning for active Man-in-the-Middle attacks.* |
 
 | Advanced Scanner Engine | Post-Scan PDF Reports |
 | :---: | :---: |
-| <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Scanner+Interface" alt="Scanner Upload"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Generated+PDF+Report" alt="PDF Report"> |
+| <img src="https://github.com/user-attachments/assets/a134dddf-1b15-4a52-9f6f-2fb86c761c74" alt="Scanner Interface"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Generated+PDF+Report" alt="PDF Report"> |
 | *Upload mechanism for triggering the Static Analyzer and YARA logic.* | *Detailed downloadable reports featuring AI severity explanations.* |
 
 *(Replace the placeholder URLs above with actual screenshots of the application)*
