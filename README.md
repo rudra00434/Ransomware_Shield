@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150/000000/FFFFFF/?text=Ransomware+Shield" alt="Logo" width="150" height="150">
+  <img src="https://placehold.co/150x150/000000/FFFFFF.png?text=Ransomware+Shield" alt="Logo" width="150" height="150">
   <h1 align="center">Ransomware Shield</h1>
   <p align="center">
     An AI-Powered, Real-Time Ransomware Detection and Mitigation Platform.
@@ -62,12 +62,12 @@ Real-time endpoint telemtry monitoring.
 
 | Dashboard Overview | Live Network Analysis |
 | :---: | :---: |
-| <img src="https://via.placeholder.com/500x300/101827/FFFFFF/?text=Dashboard+Screenshot" alt="Dashboard Setup"> | <img src="https://via.placeholder.com/500x300/101827/FFFFFF/?text=Network+Analysis+Screenshot" alt="Network Config"> |
+| <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Dashboard+Screenshot" alt="Dashboard Setup"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Network+Analysis+Screenshot" alt="Network Config"> |
 | *High-level overview of threat scores and recent scans.* | *Real-time connection monitoring and ARP Spoofing alerts.* |
 
 | AI Threat Explainer | Honeyfile Trap Alert |
 | :---: | :---: |
-| <img src="https://via.placeholder.com/500x300/101827/FFFFFF/?text=AI+Threat+Explainer" alt="AI Explainer"> | <img src="https://via.placeholder.com/500x300/ef4444/FFFFFF/?text=CRITICAL:+Ransomware+Activity+Detected" alt="Honeyfile Trip"> |
+| <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=AI+Threat+Explainer" alt="AI Explainer"> | <img src="https://placehold.co/500x300/ef4444/FFFFFF.png?text=CRITICAL:+Ransomware+Activity+Detected" alt="Honeyfile Trip"> |
 | *Llama 3 translating YARA matches into plain English.* | *Global WebSocket alert triggered when a decoy file is modified.* |
 
 *(Replace the placeholder URLs above with actual screenshots of the application)*
