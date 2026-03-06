@@ -70,6 +70,11 @@ Real-time endpoint telemtry monitoring.
 | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=AI+Threat+Explainer" alt="AI Explainer"> | <img src="https://placehold.co/500x300/ef4444/FFFFFF.png?text=CRITICAL:+Ransomware+Activity+Detected" alt="Honeyfile Trip"> |
 | *Llama 3 translating YARA matches into plain English.* | *Global WebSocket alert triggered when a decoy file is modified.* |
 
+| Advanced Scanner Engine | Post-Scan PDF Reports |
+| :---: | :---: |
+| <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Scanner+Interface" alt="Scanner Upload"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Generated+PDF+Report" alt="PDF Report"> |
+| *Upload mechanism for triggering the Static Analyzer and YARA logic.* | *Detailed downloadable reports featuring AI severity explanations.* |
+
 *(Replace the placeholder URLs above with actual screenshots of the application)*
 
 ---
