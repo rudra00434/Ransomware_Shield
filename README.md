@@ -62,8 +62,7 @@ Real-time endpoint telemtry monitoring.
 
 | Dashboard Overview | Live Network Analysis |
 | :---: | :---: |
-<img width="1897" height="907" alt="image" src="https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b" />
-" alt="Dashboard Setup"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Network+Analysis+Screenshot" alt="Network Config"> |
+| <img src="https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b" alt="Dashboard Setup"> | <img src="https://placehold.co/500x300/101827/FFFFFF.png?text=Network+Analysis+Screenshot" alt="Network Config"> |
 | *High-level overview of threat scores and recent scans.* | *Real-time connection monitoring and ARP Spoofing alerts.* |
 
 | AI Threat Explainer | Honeyfile Trap Alert |
