@@ -514,7 +514,7 @@ ws.onmessage = (event) => {
 ## 📄 License
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## Developed by Rudranil Goswami.
+### Developed by Rudranil Goswami.
 
-## Contact email : tatairudra39@gmail.com .
+### Contact email : tatairudra39@gmail.com .
 
