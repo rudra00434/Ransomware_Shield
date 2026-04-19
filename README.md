@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="1112" height="812" alt="image" src="https://github.com/user-attachments/assets/adc26974-b1c6-44b1-ad14-e910ba6c9ab8" />
+  <img width="1012" height="712" alt="image" src="https://github.com/user-attachments/assets/adc26974-b1c6-44b1-ad14-e910ba6c9ab8" />
   <h1 align="center">Ransomware Shield</h1>
   <p align="center">
     An AI-Powered, Real-Time Ransomware Detection and Mitigation Platform.
