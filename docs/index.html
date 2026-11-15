@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ransomware Shield — AI-Powered Ransomware Detection & Mitigation</title>
+  <meta name="description" content="An AI-Powered, Real-Time Ransomware Detection and Mitigation Platform featuring Ensemble ML, BLAKE3 PE Analysis, Honeyfile Traps, Live Network Threat Intel, and Groq LLaMA 3.1 Explanations." />
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              bg: '#060913',
+              surface: '#0c1222',
+              card: '#11192e',
+              border: '#1e293b',
+              cyan: '#00f0ff',
+              emerald: '#10b981',
+              purple: '#8b5cf6',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'scanline': 'scanline 8s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            scanline: {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(400%)' },
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom Cyber SOC Styles */
+    body {
+      background-color: #060913;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Cyber Grid Background */
+    .cyber-grid {
+      background-size: 44px 44px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+    }
+
+    /* Glassmorphism Cards */
+    .glass-panel {
+      background: rgba(12, 18, 34, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .glass-card {
+      background: linear-gradient(145deg, rgba(17, 25, 46, 0.85), rgba(10, 15, 29, 0.92));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 240, 255, 0.12);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 240, 255, 0.42);
+      box-shadow: 0 0 28px -6px rgba(0, 240, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    /* Custom Range Sliders for Threat Simulator */
+    input[type="range"].cyber-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: #1e293b;
+      outline: none;
+    }
+    input[type="range"].cyber-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00f0ff;
+      cursor: pointer;
+      border: 2px solid #060913;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"].cyber-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060913;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Architecture Active Node Glow */
+    .arch-node {
+      transition: all 0.25s ease;
+    }
+    .arch-node.active {
+      border-color: #00f0ff !important;
+      background: rgba(0, 240, 255, 0.1) !important;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.28);
+    }
+  </style>
+</head>
+<body class="cyber-grid antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+
+  <!-- Ambient Top Radial Glows -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+    <div class="absolute -top-40 left-1/4 w-[520px] h-[520px] rounded-full bg-cyan-500/10 blur-[130px]"></div>
+    <div class="absolute top-32 right-1/4 w-[440px] h-[440px] rounded-full bg-purple-600/10 blur-[130px]"></div>
+  </div>
+
+  <!-- Toast Notification Banner (No alert() used anywhere) -->
+  <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="glass-panel border-cyan-400/40 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium text-cyan-100">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+      <span id="toast-message">Copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- 1. STICKY GLASSMORPHIC NAVBAR -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-600/20 border border-cyan-400/40 group-hover:border-cyan-400 transition-colors">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-cyan-400"></i>
+            <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+          </div>
+          <div>
+            <span class="font-display font-bold text-lg tracking-tight text-white">Ransomware <span class="text-cyan-400">Shield</span></span>
+            <span class="hidden sm:inline-block ml-2 px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">SOC v2.0</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+          <a href="#simulator" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>Live Simulator
+          </a>
+          <a href="#features" class="hover:text-cyan-400 transition-colors">7 Defense Pillars</a>
+          <a href="#architecture" class="hover:text-cyan-400 transition-colors">Architecture</a>
+          <a href="#screenshots" class="hover:text-cyan-400 transition-colors">Screenshots</a>
+          <a href="#setup-api" class="hover:text-cyan-400 transition-colors">Setup & API</a>
+        </nav>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2.5">
+          <a href="https://youtu.be/UT3i6cZeBFA" target="_blank" rel="noopener noreferrer"
+             class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-rose-300 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 transition-all">
+            <i data-lucide="play-circle" class="w-4 h-4 text-rose-400"></i>
+            Demo Video
+          </a>
+          <a href="https://github.com/rudra00434/Ransomware_Shield" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 shadow-[0_0_20px_rgba(0,240,255,0.35)] transition-all">
+            <i data-lucide="github" class="w-4 h-4"></i>
+            <span>GitHub Repo</span>
+          </a>
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-[#080d1a]/95 px-4 py-4 space-y-2">
+      <a href="#simulator" class="block px-3 py-2 rounded-lg text-sm font-medium text-cyan-300 bg-cyan-500/10">Live Threat Simulator</a>
+      <a href="#features" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/60">7 Defense Pillars</a>
+      <a href="#architecture" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/60">Technical Architecture</a>
+      <a href="#screenshots" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/60">Screenshots</a>
+      <a href="#setup-api" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/60">Installation & API</a>
+      <a href="https://youtu.be/UT3i6cZeBFA" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-rose-300 bg-rose-500/10">
+        <i data-lucide="play-circle" class="w-4 h-4"></i> Watch Demo Video
+      </a>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+
+    <!-- 2. HERO SECTION -->
+    <section class="pt-12 pb-20 sm:pt-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        
+        <!-- Hero Left Content -->
+        <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            ACTIVE ENDPOINT TELEMETRY &bull; ENSEMBLE ML + LLAMA 3.1
+          </div>
+
+          <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.35rem] leading-[1.12] tracking-tight text-white">
+            AI-Powered, Real-Time <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-purple-400">Ransomware Detection</span> &amp; Mitigation
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            Going far beyond signature-based scanning. Ransomware Shield unifies <strong class="text-white">19-feature Ensemble ML</strong>, <strong class="text-cyan-300">BLAKE3 Static PE Analysis</strong>, <strong class="text-emerald-300">Process-Attributed Honeyfile Traps</strong>, <strong class="text-purple-300">Live Network Threat Intelligence</strong>, and <strong class="text-white">Groq LLaMA 3.1</strong> remediation into a full-stack SOC platform.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+            <a href="#simulator"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-slate-950 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:brightness-110 shadow-[0_0_25px_rgba(0,240,255,0.35)] transition-all">
+              <i data-lucide="cpu" class="w-4 h-4"></i>
+              Try Interactive Threat Simulator
+            </a>
+            <a href="https://github.com/rudra00434/Ransomware_Shield" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-white bg-slate-900/90 border border-slate-700 hover:border-cyan-400/50 transition-all">
+              <i data-lucide="github" class="w-4 h-4 text-cyan-400"></i>
+              Explore GitHub Repo
+            </a>
+            <a href="https://youtu.be/UT3i6cZeBFA" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm text-rose-300 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 transition-all">
+              <i data-lucide="youtube" class="w-4 h-4 text-rose-400"></i>
+              Demo Video
+            </a>
+          </div>
+
+          <!-- Tech Stack Badges -->
+          <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-mono text-slate-400">
+            <span class="px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">Django 4.2 + Channels</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">React 18 + Vite</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">Celery + Redis</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">scikit-learn + YARA</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-800">Groq LLaMA 3.1</span>
+          </div>
+        </div>
+
+        <!-- Hero Right: Cyber-Terminal Mockup with Banner Image -->
+        <div class="lg:col-span-6">
+          <div class="relative rounded-2xl p-1 bg-gradient-to-br from-cyan-400/40 via-purple-500/30 to-emerald-400/40 shadow-[0_0_50px_-12px_rgba(0,240,255,0.3)] animate-float">
+            <div class="rounded-xl bg-[#070b16] overflow-hidden border border-slate-800">
+              <!-- Terminal Window Top Bar -->
+              <div class="flex items-center justify-between px-4 py-2.5 bg-[#0c1326] border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                  <span class="ml-2 text-xs font-mono text-slate-400">ransomware-shield://soc-command-center</span>
+                </div>
+                <span class="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> LIVE
+                </span>
+              </div>
+
+              <!-- Hero Banner Image with Fallback -->
+              <div class="relative overflow-hidden bg-slate-950">
+                <img
+                  src="https://github.com/user-attachments/assets/adc26974-b1c6-44b1-ad14-e910ba6c9ab8"
+                  alt="Ransomware Shield Platform Banner"
+                  onerror="this.onerror=null;this.src='https://placehold.co/1012x612/0c1222/00f0ff?text=Ransomware+Shield+SOC+Platform';"
+                  class="w-full h-auto object-cover"
+                />
+                <!-- Subtle Scanline Overlay -->
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070b16] via-transparent to-transparent opacity-40"></div>
+              </div>
+
+              <!-- Live Telemetry Footer Strip -->
+              <div class="px-4 py-2.5 bg-[#0a1020] border-t border-slate-800/90 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                <span class="text-cyan-400">BLAKE3: <span class="text-slate-300">9f86d081884c7d65...</span></span>
+                <span class="text-emerald-400">HONEYFILE TRAP: <span class="text-slate-300">ARMED (3 Decoys)</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Metrics Strip -->
+      <div class="mt-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="glass-card rounded-xl p-4 text-center">
+          <div class="font-display font-extrabold text-2xl sm:text-3xl text-cyan-400">99.96%</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">Ensemble ML Precision</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+          <div class="font-display font-extrabold text-2xl sm:text-3xl text-emerald-400">14&times; Faster</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">BLAKE3 Multi-Hashing</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+          <div class="font-display font-extrabold text-2xl sm:text-3xl text-purple-400">19 Features</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">Engineered PE Telemetry</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+          <div class="font-display font-extrabold text-2xl sm:text-3xl text-amber-400">60+ APIs</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">Suspicious Win32 Signatures</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center col-span-2 sm:col-span-1">
+          <div class="font-display font-extrabold text-2xl sm:text-3xl text-rose-400">&lt; 0.1%</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">False Negative Rate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. INTERACTIVE THREAT DETECTION & SCORING SIMULATOR -->
+    <section id="simulator" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-purple-500/10 text-purple-300 border border-purple-500/30 mb-3">
+          <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i> INTERACTIVE NORMALIZED SCAN PIPELINE
+        </span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white">Live Multi-Engine Threat Simulator</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          Test Ransomware Shield's weighted scoring formula in real time: <span class="font-mono text-cyan-300">VirusTotal (30%) + YARA (25%) + ML Classifier (25%) + Static PE (20%)</span> plus the independent <span class="font-mono text-rose-300">+20% Ransomware String Bonus</span>.
+        </p>
+      </div>
+
+      <div class="glass-panel rounded-2xl border border-slate-800 p-5 sm:p-8 shadow-2xl">
+        <!-- Preset Sample File Selector -->
+        <div class="mb-8">
+          <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between flex-wrap gap-2">
+            <span>1. Select a Sample PE Payload or Customize Engine Signals Below:</span>
+            <span class="text-cyan-400">Magic Bytes Verified: <code class="bg-slate-900 px-1.5 py-0.5 rounded">4D 5A (MZ/PE32+)</code></span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <button type="button" onclick="loadPreset('ransomware')" id="preset-ransomware"
+              class="preset-btn text-left p-4 rounded-xl border border-rose-500/50 bg-rose-500/10 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-sm font-bold text-white truncate">invoice_2026.pdf.exe</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">CRITICAL</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5">LockBit-style encryptor &bull; High entropy (7.89) &bull; vssadmin + .onion strings</p>
+            </button>
+
+            <button type="button" onclick="loadPreset('dropper')" id="preset-dropper"
+              class="preset-btn text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-amber-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-sm font-bold text-white truncate">svchost_patch.exe</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">MEDIUM/HIGH</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5">UPX-packed dropper &bull; Process injection APIs &bull; Unsigned binary</p>
+            </button>
+
+            <button type="button" onclick="loadPreset('clean')" id="preset-clean"
+              class="preset-btn text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-emerald-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-sm font-bold text-white truncate">vlc-3.0.21-win64.exe</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">CLEAN</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5">Valid Authenticode signature &bull; Normal section entropy (5.42) &bull; 0/72 VT</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Controls: 4 Weighted Engines + Ransomware Bonus -->
+          <div class="lg:col-span-6 space-y-5 bg-[#080d1a] p-5 rounded-xl border border-slate-800/90">
+            <h3 class="font-display font-semibold text-base text-white flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
+              Multi-Engine Signal Weights
+            </h3>
+
+            <!-- Engine 1: VirusTotal (30%) -->
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1.5">
+                <span class="text-slate-300">VirusTotal Reputation <span class="text-cyan-400">(Weight: 30%)</span></span>
+                <span id="val-vt" class="text-cyan-300 font-bold">88 / 100</span>
+              </div>
+              <input type="range" id="slider-vt" min="0" max="100" value="88" oninput="updateSimulator()" class="w-full cyber-slider" />
+            </div>
+
+            <!-- Engine 2: YARA Scanner (25%) -->
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1.5">
+                <span class="text-slate-300">Thread-Safe YARA Matches <span class="text-purple-400">(Weight: 25%)</span></span>
+                <span id="val-yara" class="text-purple-300 font-bold">85 / 100</span>
+              </div>
+              <input type="range" id="slider-yara" min="0" max="100" value="85" oninput="updateSimulator()" class="w-full cyber-slider" />
+            </div>
+
+            <!-- Engine 3: Ensemble ML Classifier (25%) -->
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1.5">
+                <span class="text-slate-300">Ensemble ML Confidence <span class="text-emerald-400">(Weight: 25%)</span></span>
+                <span id="val-ml" class="text-emerald-300 font-bold">96 / 100</span>
+              </div>
+              <input type="range" id="slider-ml" min="0" max="100" value="96" oninput="updateSimulator()" class="w-full cyber-slider" />
+            </div>
+
+            <!-- Engine 4: Static PE Analysis (20%) -->
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1.5">
+                <span class="text-slate-300">Static PE &amp; Entropy Score <span class="text-amber-400">(Weight: 20%)</span></span>
+                <span id="val-static" class="text-amber-300 font-bold">90 / 100</span>
+              </div>
+              <input type="range" id="slider-static" min="0" max="100" value="90" oninput="updateSimulator()" class="w-full cyber-slider" />
+            </div>
+
+            <!-- Ransomware String Bonus Toggle (+20%) -->
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-4">
+              <div>
+                <div class="text-sm font-semibold text-rose-300 flex items-center gap-1.5">
+                  <i data-lucide="flame" class="w-4 h-4 text-rose-400"></i>
+                  Ransomware String Bonus (+20%)
+                </div>
+                <p class="text-xs text-slate-400">Triggers on Bitcoin wallets, <code class="text-slate-300">.onion</code> URLs, <code class="text-slate-300">YOUR FILES</code>, or <code class="text-slate-300">vssadmin</code></p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                <input type="checkbox" id="toggle-ransom-bonus" checked onchange="updateSimulator()" class="sr-only peer" />
+                <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Right Output: Computed Threat Verdict & Groq LLaMA 3.1 Explanation -->
+          <div class="lg:col-span-6 space-y-4">
+            <!-- Score Header Card -->
+            <div id="verdict-card" class="p-5 rounded-xl border border-rose-500/40 bg-rose-500/10 transition-all">
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <div class="text-xs font-mono uppercase tracking-wider text-slate-400">Normalized Threat Verdict</div>
+                  <div class="flex items-center gap-3 mt-1">
+                    <span id="verdict-badge" class="font-display font-extrabold text-2xl sm:text-3xl text-rose-400">CRITICAL</span>
+                    <span id="verdict-score" class="px-2.5 py-1 rounded-lg font-mono text-sm font-bold bg-slate-950/80 text-white border border-slate-700">Score: 100 / 100</span>
+                  </div>
+                </div>
+                <div class="text-right font-mono text-xs">
+                  <div class="text-slate-400">File: <span id="sim-filename" class="text-white font-semibold">invoice_2026.pdf.exe</span></div>
+                  <div class="text-slate-400 mt-0.5">BLAKE3: <span id="sim-hash" class="text-cyan-400">e3b0c44298fc1c14...</span></div>
+                </div>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden mt-4 border border-slate-800">
+                <div id="verdict-bar" class="h-full bg-rose-500 transition-all duration-300" style="width: 100%"></div>
+              </div>
+            </div>
+
+            <!-- Flagged PE APIs & Indicators -->
+            <div class="p-4 rounded-xl bg-[#080d1a] border border-slate-800">
+              <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Extracted Static PE &amp; YARA Indicators</div>
+              <div id="sim-indicators" class="flex flex-wrap gap-1.5">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Simulated Groq LLaMA 3.1 AI Explainer Output -->
+            <div class="p-4 rounded-xl bg-[#080d1a] border border-purple-500/30">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-mono font-semibold text-purple-300 flex items-center gap-1.5">
+                  <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
+                  Groq (LLaMA 3.1) AI Threat Analyst Summary
+                </span>
+                <span class="text-[10px] font-mono text-slate-500">Inference: 142ms</span>
+              </div>
+              <p id="sim-ai-summary" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <!-- Populated dynamically -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CORE DEFENSE MODULES (7 PILLARS GRID) -->
+    <section id="features" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 mb-3">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i> MULTI-LAYERED ENDPOINT DEFENSE
+        </span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white">7 Integrated Security Engines</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          Every uploaded binary, file-system event, and outbound socket connection is inspected across seven specialized defense modules.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Module 1: Static PE Analyzer -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center text-cyan-400">
+                <i data-lucide="file-code-2" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md">MODULE 01</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Industry-Grade Static PE Analyzer</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Inspects Windows Executables without execution, extracting <strong class="text-slate-200">19 ML-ready features</strong> in a single pass with <strong class="text-cyan-300">BLAKE3 hashing (~14&times; faster)</strong> plus SHA-256, SHA-1, and MD5.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <span><strong>60+ Suspicious APIs:</strong> Crypto (<code>BCryptEncrypt</code>), File Enum, Process Injection (<code>WriteProcessMemory</code>), Anti-Debug, Lateral Movement, &amp; Shadow Copy deletion (<code>vssadmin</code>).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <span><strong>Packer &amp; Anomaly Checks:</strong> Detects <code>.upx</code>, <code>.aspack</code>, <code>.themida</code>, Authenticode signatures, TLS callbacks, and section entropy.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 2: Thread-Safe YARA Scanner -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-purple-500/15 border border-purple-400/30 flex items-center justify-center text-purple-400">
+                <i data-lucide="search-code" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-md">MODULE 02</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Thread-Safe YARA Scanner Engine</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              High-throughput signature matching built for concurrent Celery worker execution with automated rule hot-reloading.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>
+                <span><strong>Thread-Safe Caching:</strong> Uses <code>threading.Lock</code> with individual file <code>mtime</code> cache invalidation across <code>.yar</code> and <code>.yara</code> rules.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>
+                <span><strong>Forensic Match Extraction &amp; ReDoS Guard:</strong> Extracts first 5 matched strings (&times; 64 bytes) with strict regex timeouts.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 3: Ensemble ML Classifier -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
+                <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md">MODULE 03</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Ensemble ML Classifier (19 Features)</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Soft-voting ensemble combining <strong class="text-slate-200">GradientBoosting + RandomForest</strong> trained on 15,550 samples across ransomware, trojans, droppers, worms, and packed malware.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                <span><strong>Validated Accuracy:</strong> Stratified 5-fold cross-validation achieving <strong>99.96% precision</strong> and <strong>&lt; 0.1% false negative rate</strong>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                <span><strong>Heuristic Fallback:</strong> Multi-signal weighted heuristic guarantees uninterrupted scoring even before model training.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 4: Generative AI Threat Explainer -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-pink-500/15 border border-pink-400/30 flex items-center justify-center text-pink-400">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-pink-400 bg-pink-500/10 px-2.5 py-1 rounded-md">MODULE 04</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Generative AI Threat Explainer</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Translates dense PE headers, YARA hits, and network telemetry into plain-English incident response playbooks via <strong class="text-slate-200">Groq (LLaMA 3.1)</strong> &amp; LangChain.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-pink-400 shrink-0 mt-0.5"></i>
+                <span><strong>Rich Markdown SOC UI:</strong> Renders syntax-highlighted remediation commands, tables, and copy buttons in real time.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-pink-400 shrink-0 mt-0.5"></i>
+                <span><strong>Conversational Analyst:</strong> Interactive security chat assistant plus automated PDF executive report narratives.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 5: Honeyfile Trap -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-400">
+                <i data-lucide="shield-ban" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md">MODULE 05</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Honeyfile Trap &amp; Process Attribution</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Active zero-day ransomware tripwire deploying realistic, non-trivial decoy files (<code>passwords.txt</code>, <code>bitcoin_wallet.dat</code>, <code>tax_returns_2025.pdf</code>).
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>PID &amp; Entropy Forensics:</strong> Pinpoints offending process name/path via <code>psutil</code> and flags entropy jumps <code>&gt; 7.0</code>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Instant WebSocket Alerts:</strong> Broadcasts <code>CRITICAL</code> alerts over Django Channels with a 10s anti-flood cooldown.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 6: Live Network Monitor -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400">
+                <i data-lucide="radar" class="w-5 h-5"></i>
+              </div>
+              <span class="font-mono text-xs text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-md">MODULE 06</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Live Network Monitor &amp; Threat Intel</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Real-time socket telemetry enriched with Emerging Threats IP feeds, MaxMind GeoLite2 country resolution, and <strong class="text-slate-200">ARP Spoofing MitM detection</strong>.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong>C2 &amp; Beaconing Detection:</strong> Flags C2/mining ports (<code>4444</code>, <code>8443</code>, <code>9001</code>, <code>3333</code>) and detects periodic callbacks via coefficient of variation.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong>0–100 Connection Risk Score:</strong> Maps every socket to its owning PID, executable path, and user account.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Module 7: Normalized Scan Pipeline (Full Width Banner Card on lg) -->
+        <div class="glass-card rounded-2xl p-6 md:col-span-2 lg:col-span-3 border-cyan-500/25">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div class="space-y-2 max-w-3xl">
+              <div class="flex items-center gap-2.5">
+                <span class="font-mono text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md">MODULE 07 &bull; ORCHESTRATOR</span>
+                <span class="text-xs font-mono text-slate-400">CLEAN &rarr; LOW &rarr; MEDIUM &rarr; HIGH &rarr; CRITICAL</span>
+              </div>
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-white">Normalized Scan Pipeline &amp; Zero-Overwrite Security</h3>
+              <p class="text-sm text-slate-400 leading-relaxed">
+                Orchestrates VirusTotal (30%), YARA (25%), Ensemble ML (25%), and Static PE Analysis (20%) with an independent +20% ransomware indicator boost. Enforces <strong class="text-slate-200">magic-byte file verification</strong> (never trusting extensions), <strong class="text-slate-200">Celery task timeouts</strong> (5m hard / 4m soft), and <strong class="text-slate-200">zero-overwrite secure file deletion</strong> post-analysis.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 shrink-0 font-mono text-xs">
+              <span class="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">CLEAN</span>
+              <span class="px-3 py-2 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-300">LOW</span>
+              <span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">MEDIUM</span>
+              <span class="px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-300">HIGH</span>
+              <span class="px-3 py-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300">CRITICAL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. INTERACTIVE SYSTEM ARCHITECTURE & TECH STACK EXPLORER -->
+    <section id="architecture" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 mb-3">
+          <i data-lucide="network" class="w-3.5 h-3.5"></i> FULL-STACK EVENT-DRIVEN PIPELINE
+        </span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white">Interactive System Architecture</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          Click any architectural layer below to inspect its protocols, asynchronous workers, and underlying Python/JavaScript libraries.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        <!-- Interactive Node Diagram (7 cols) -->
+        <div class="lg:col-span-7 glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 space-y-4">
+          <!-- Tier 1: Frontend -->
+          <div onclick="selectArchNode('frontend')" id="node-frontend" class="arch-node active cursor-pointer p-4 rounded-xl border border-slate-700 bg-slate-900/70">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <i data-lucide="monitor" class="w-5 h-5 text-cyan-400"></i>
+                <div>
+                  <div class="font-display font-bold text-white text-sm sm:text-base">React 18 SOC Frontend Interface</div>
+                  <div class="text-xs font-mono text-slate-400">Vite &bull; Tailwind CSS &bull; Zustand &bull; Recharts &bull; React Markdown</div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono text-cyan-400">PORT 5173</span>
+            </div>
+          </div>
+
+          <!-- Connector Arrows -->
+          <div class="flex justify-around text-xs font-mono text-slate-500">
+            <span>&darr; HTTP REST + JWT</span>
+            <span>&varr; WebSockets (ws://)</span>
+          </div>
+
+          <!-- Tier 2: Django API & Channels -->
+          <div onclick="selectArchNode('gateway')" id="node-gateway" class="arch-node cursor-pointer p-4 rounded-xl border border-slate-700 bg-slate-900/70">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <i data-lucide="server" class="w-5 h-5 text-emerald-400"></i>
+                <div>
+                  <div class="font-display font-bold text-white text-sm sm:text-base">Django 4.2 API Gateway &amp; Channels (Daphne)</div>
+                  <div class="text-xs font-mono text-slate-400">Django REST Framework &bull; SimpleJWT &bull; SQLite3 / PostgreSQL</div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono text-emerald-400">PORT 8000</span>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="flex justify-center text-xs font-mono text-slate-500">
+            <span>&darr; Redis Message Broker (localhost:6379) &rarr; Celery Background Workers</span>
+          </div>
+
+          <!-- Tier 3: 4 Analysis Engines -->
+          <div onclick="selectArchNode('engines')" id="node-engines" class="arch-node cursor-pointer p-4 rounded-xl border border-slate-700 bg-slate-900/70">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-400"></i>
+                <div class="font-display font-bold text-white text-sm sm:text-base">Parallel Celery Analysis Engines &amp; Groq AI</div>
+              </div>
+              <span class="text-[11px] font-mono text-purple-400">ASYNC WORKERS</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono text-[11px]">
+              <div class="p-2 rounded bg-slate-950/90 border border-slate-800 text-cyan-300">Static PE (19)</div>
+              <div class="p-2 rounded bg-slate-950/90 border border-slate-800 text-purple-300">YARA Engine</div>
+              <div class="p-2 rounded bg-slate-950/90 border border-slate-800 text-emerald-300">Ensemble ML</div>
+              <div class="p-2 rounded bg-slate-950/90 border border-slate-800 text-amber-300">VirusTotal + AI</div>
+            </div>
+          </div>
+
+          <!-- Tier 4: Real-Time Endpoint Daemons -->
+          <div onclick="selectArchNode('daemons')" id="node-daemons" class="arch-node cursor-pointer p-4 rounded-xl border border-slate-700 bg-slate-900/70">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <i data-lucide="activity" class="w-5 h-5 text-rose-400"></i>
+                <div>
+                  <div class="font-display font-bold text-white text-sm sm:text-base">Real-Time Honeyfile Watchdog &amp; Network Threat Intel</div>
+                  <div class="text-xs font-mono text-slate-400">watchdog &bull; psutil &bull; geoip2 &bull; Emerging Threats IP Feed</div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono text-rose-400">WS STREAM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inspector Panel (5 cols) -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-6 border border-cyan-500/30 sticky top-24">
+          <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+            <span class="text-xs font-mono uppercase tracking-wider text-cyan-400">Component Inspector</span>
+            <span id="arch-badge" class="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-500/15 text-cyan-300">FRONTEND LAYER</span>
+          </div>
+          <h3 id="arch-title" class="font-display font-bold text-xl text-white mb-2">React 18 SOC Frontend Interface</h3>
+          <p id="arch-desc" class="text-sm text-slate-300 leading-relaxed mb-4">
+            Built with React 18, Vite, and Tailwind CSS to deliver a responsive Security Operations Center dashboard. Uses Zustand for low-overhead global alert state, Recharts for 7-day threat timelines, and React Markdown with syntax highlighting for ChatGPT-style AI threat explanations.
+          </p>
+          <div class="text-xs font-mono text-slate-400 mb-2">KEY PACKAGES &amp; PROTOCOLS:</div>
+          <div id="arch-tags" class="flex flex-wrap gap-2 mb-5">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 font-mono text-xs text-slate-300" id="arch-flow">
+            UI &rarr; POST /api/scanner/upload/ &rarr; Polls /jobs/&lt;id&gt;/ &amp; listens on ws/alerts/
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. PLATFORM SCREENSHOTS GALLERY WITH LIGHTBOX -->
+    <section id="screenshots" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-purple-500/10 text-purple-300 border border-purple-500/30 mb-3">
+          <i data-lucide="image" class="w-3.5 h-3.5"></i> LIVE INTERFACE SHOWCASE
+        </span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white">Platform Screenshots</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          Explore the real-time SOC dashboard, live socket risk scoring, Groq LLaMA 3.1 markdown explanations, MitM ARP spoofing alerts, and downloadable PDF reports. Click any screenshot to inspect full-screen.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Screenshot 1 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b', 'Dashboard Overview', 'High-level overview of threat scores, 7-day timeline metrics, and recent scans.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/1a9fd176-68b7-4b60-9118-6e1d51fef46b" alt="Dashboard Overview"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/00f0ff?text=Dashboard+Overview';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">Dashboard Overview</h3>
+            <p class="text-xs text-slate-400 mt-1">High-level overview of threat scores, clear rates, and recent scans.</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 2 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/3a5d258e-e4a9-4922-ae44-71b3b75777dd', 'Live Network Analysis', 'Real-time connection monitoring with process names, risk scores, GeoIP, and IP reputation.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/3a5d258e-e4a9-4922-ae44-71b3b75777dd" alt="Live Network Analysis"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/10b981?text=Live+Network+Analysis';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">Live Network Analysis</h3>
+            <p class="text-xs text-slate-400 mt-1">Real-time connection monitoring with process names, risk scores, and IP reputation.</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 3 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/63107bb4-94a7-4777-9cb7-ed757eb3453d', 'AI Threat Explainer', 'LLaMA 3.1 functioning as a conversational security analyst with ChatGPT-style markdown rendering.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/63107bb4-94a7-4777-9cb7-ed757eb3453d" alt="AI Threat Explainer"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/8b5cf6?text=AI+Threat+Explainer';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">AI Threat Explainer</h3>
+            <p class="text-xs text-slate-400 mt-1">LLaMA 3.1 conversational security analyst with ChatGPT-style markdown rendering.</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 4 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/518fdac8-99b4-422d-8247-b70cca9df54e', 'Live MitM ARP Alerts', 'Global warning banner and WebSocket broadcast for active Man-in-the-Middle ARP spoofing attacks.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/518fdac8-99b4-422d-8247-b70cca9df54e" alt="Live MitM ARP Alerts"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/f43f5e?text=Live+MitM+ARP+Alerts';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">Live MitM ARP Alerts</h3>
+            <p class="text-xs text-slate-400 mt-1">Global warning for active Man-in-the-Middle ARP spoofing attacks.</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 5 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/189fc160-9b6c-4c0a-99d3-1f30acd154e7', 'Advanced Scanner Engine', 'Multi-engine scan with BLAKE3 hashing, AI explanation, VirusTotal results, and ransomware indicators.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/189fc160-9b6c-4c0a-99d3-1f30acd154e7" alt="Advanced Scanner Engine"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/00f0ff?text=Advanced+Scanner+Engine';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">Advanced Scanner Engine</h3>
+            <p class="text-xs text-slate-400 mt-1">Multi-engine scan with BLAKE3 hashing, AI explanation, VT results, and ransomware indicators.</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 6 -->
+        <div onclick="openLightbox('https://github.com/user-attachments/assets/f2630669-60e2-4f0d-9f8a-d9018af5544d', 'Post-Scan PDF Reports', 'Detailed downloadable PDF threat reports featuring AI severity explanations and forensic hashes.')"
+             class="glass-card rounded-2xl overflow-hidden cursor-pointer group">
+          <div class="relative aspect-video bg-slate-950 overflow-hidden">
+            <img src="https://github.com/user-attachments/assets/f2630669-60e2-4f0d-9f8a-d9018af5544d" alt="Post-Scan PDF Reports"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/0c1222/10b981?text=Post-Scan+PDF+Reports';"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-cyan-400/50 text-xs font-mono text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-white text-base">Post-Scan PDF Reports</h3>
+            <p class="text-xs text-slate-400 mt-1">Detailed downloadable reports featuring AI severity explanations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. QUICKSTART INSTALLATION & INTERACTIVE API REFERENCE -->
+    <section id="setup-api" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-12 gap-10">
+        
+        <!-- Left Column: Quickstart Installation Guide (6 cols) -->
+        <div class="lg:col-span-6 space-y-5">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 mb-2">
+              <i data-lucide="terminal" class="w-3.5 h-3.5"></i> LOCAL DEPLOYMENT
+            </span>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Quickstart Installation</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">Requires Python 3.10+, Node.js v18+, Redis (`localhost:6379`), and API keys for VirusTotal &amp; Groq.</p>
+          </div>
+
+          <!-- Install Step Tabs -->
+          <div class="flex flex-wrap gap-1.5 border-b border-slate-800 pb-2">
+            <button type="button" onclick="switchInstallTab('clone')" id="inst-tab-clone" class="inst-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">1. Clone &amp; Backend</button>
+            <button type="button" onclick="switchInstallTab('workers')" id="inst-tab-workers" class="inst-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-slate-400 hover:text-white">2. Celery &amp; Honeyfile</button>
+            <button type="button" onclick="switchInstallTab('frontend')" id="inst-tab-frontend" class="inst-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-slate-400 hover:text-white">3. Frontend &amp; GeoIP</button>
+          </div>
+
+          <!-- Step 1 Content -->
+          <div id="inst-panel-clone" class="inst-panel glass-panel rounded-xl border border-slate-800 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
+              <span class="text-xs font-mono text-slate-400">bash &mdash; Backend &amp; ML Model Training</span>
+              <button type="button" onclick="copyCodeBlock('code-clone')" class="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+              </button>
+            </div>
+            <pre id="code-clone" class="p-4 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code>git clone https://github.com/rudra00434/Ransomware_Shield.git
+cd Ransomware_Shield/backend
+
+# Create &amp; activate virtual environment
+python -m venv venv
+# Windows: venv\Scripts\activate | Mac/Linux: source venv/bin/activate
+
+pip install -r requirements.txt
+# Add GROQ_API_KEY &amp; VT_API_KEY to .env
+
+python manage.py migrate
+python -m ai_engine.ml.train_model
+python manage.py runserver</code></pre>
+          </div>
+
+          <!-- Step 2 Content -->
+          <div id="inst-panel-workers" class="inst-panel hidden glass-panel rounded-xl border border-slate-800 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
+              <span class="text-xs font-mono text-slate-400">bash &mdash; Background Workers (Separate Terminals)</span>
+              <button type="button" onclick="copyCodeBlock('code-workers')" class="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+              </button>
+            </div>
+            <pre id="code-workers" class="p-4 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code># Terminal 2: Ensure Redis Server is running on localhost:6379
+redis-server
+
+# Terminal 3: Start Celery Scan Worker (use --pool=solo on Windows)
+cd backend &amp;&amp; venv\Scripts\activate
+celery -A config worker -l info --pool=solo
+
+# Terminal 4: Arm Honeyfile Ransomware Trap
+cd backend &amp;&amp; venv\Scripts\activate
+python manage.py run_honeyfile</code></pre>
+          </div>
+
+          <!-- Step 3 Content -->
+          <div id="inst-panel-frontend" class="inst-panel hidden glass-panel rounded-xl border border-slate-800 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
+              <span class="text-xs font-mono text-slate-400">bash &mdash; Vite Client &amp; Optional MaxMind GeoIP</span>
+              <button type="button" onclick="copyCodeBlock('code-frontend')" class="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+              </button>
+            </div>
+            <pre id="code-frontend" class="p-4 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code># Terminal 5: Start React + Vite Frontend
+cd frontend
+npm install
+npm run dev
+# Open http://localhost:5173 in your browser
+
+# Optional GeoIP Country Resolution:
+# Download GeoLite2-Country.mmdb from MaxMind
+# Place inside: backend/geoip/GeoLite2-Country.mmdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive API Explorer (6 cols) -->
+        <div class="lg:col-span-6 space-y-5">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-purple-500/10 text-purple-300 border border-purple-500/30 mb-2">
+              <i data-lucide="webhook" class="w-3.5 h-3.5"></i> REST &amp; WEBSOCKET REFERENCE
+            </span>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Interactive API Explorer</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">Rate Limits: <span class="text-slate-200 font-mono">20 req/min</span> (Anonymous) &bull; <span class="text-emerald-300 font-mono">100 req/min</span> (JWT Authenticated).</p>
+          </div>
+
+          <!-- API Tabs -->
+          <div class="flex flex-wrap gap-1.5 border-b border-slate-800 pb-2">
+            <button type="button" onclick="switchApiTab('scanner')" id="api-tab-scanner" class="api-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-purple-500/20 text-purple-300 border border-purple-400/40">Scanner</button>
+            <button type="button" onclick="switchApiTab('ai')" id="api-tab-ai" class="api-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-slate-400 hover:text-white">AI Engine</button>
+            <button type="button" onclick="switchApiTab('ws')" id="api-tab-ws" class="api-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-slate-400 hover:text-white">WebSockets</button>
+            <button type="button" onclick="switchApiTab('auth')" id="api-tab-auth" class="api-tab px-3 py-1.5 rounded-lg text-xs font-mono font-semibold text-slate-400 hover:text-white">Auth &amp; Stats</button>
+          </div>
+
+          <!-- API Panel: Scanner -->
+          <div id="api-panel-scanner" class="api-panel glass-panel rounded-xl border border-slate-800 p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">POST</span> <span class="text-white ml-1">/api/scanner/upload/</span></div>
+              <span class="text-slate-400">multipart/form-data</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">GET</span> <span class="text-white ml-1">/api/scanner/jobs/&lt;id&gt;/</span></div>
+              <span class="text-slate-400">Poll Status &amp; Results</span>
+            </div>
+            <pre class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code>// GET /api/scanner/jobs/42/ (200 OK)
+{
+  "id": 42,
+  "status": "COMPLETED",
+  "file_name": "suspicious_file.exe",
+  "result": {
+    "threat_level": "HIGH",
+    "detection_count": 3,
+    "engine_results": {
+      "static_analysis": { "entropy": 7.84, "suspicious_apis": 9 },
+      "yara_matches": ["Ransomware_LockBit_Strings"],
+      "ml_prediction": { "label": "Ransomware", "confidence": 0.994 },
+      "virustotal": { "malicious": 48, "total": 72 }
+    }
+  }
+}</code></pre>
+          </div>
+
+          <!-- API Panel: AI Engine -->
+          <div id="api-panel-ai" class="api-panel hidden glass-panel rounded-xl border border-slate-800 p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">POST</span> <span class="text-white ml-1">/api/ai/chat/</span></div>
+              <span class="text-slate-400">Conversational Security Analyst</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">POST</span> <span class="text-white ml-1">/api/ai/network-analysis/</span></div>
+              <span class="text-slate-400">Socket Risk Explanation</span>
+            </div>
+            <pre class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code>// POST /api/ai/network-analysis/
+// Request:
+{
+  "data": "192.168.1.5:443 -> 45.33.32.156:8443 | Process: svchost.exe | Risk: 78"
+}
+// Response (200 OK):
+{
+  "analysis": "## Security Analysis\n\nOutbound connection to port 8443 from svchost.exe exhibits C2 beaconing characteristics..."
+}</code></pre>
+          </div>
+
+          <!-- API Panel: WebSockets -->
+          <div id="api-panel-ws" class="api-panel hidden glass-panel rounded-xl border border-slate-800 p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">WS</span> <span class="text-white ml-1">ws://localhost:8000/ws/alerts/</span></div>
+              <span class="text-slate-400">Honeyfile &amp; ARP Spoof Alerts</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">WS</span> <span class="text-white ml-1">ws://localhost:8000/ws/network-analysis/</span></div>
+              <span class="text-slate-400">Live Enriched Connections</span>
+            </div>
+            <pre class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code>const ws = new WebSocket('ws://localhost:8000/ws/alerts/');
+ws.onmessage = (event) => {
+  const alert = JSON.parse(event.data);
+  // alert.type: "HONEYFILE_ALERT" | "ARP_SPOOF_ALERT"
+  // alert.severity: "CRITICAL" | "WARNING"
+  // alert.details: { process_name, pid, file_path, entropy }
+};</code></pre>
+          </div>
+
+          <!-- API Panel: Auth & Stats -->
+          <div id="api-panel-auth" class="api-panel hidden glass-panel rounded-xl border border-slate-800 p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">POST</span> <span class="text-white ml-1">/api/auth/register/ &amp; /api/auth/login/</span></div>
+              <span class="text-slate-400">SimpleJWT Tokens</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">GET</span> <span class="text-white ml-1">/api/dashboard/stats/ &amp; /api/reports/download/&lt;id&gt;/</span></div>
+              <span class="text-slate-400">KPIs &amp; PDF Export</span>
+            </div>
+            <pre class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed"><code>// GET /api/dashboard/stats/ (200 OK)
+{
+  "kpi": {
+    "total_scans_7d": 156,
+    "critical_threats": 3,
+    "suspicious_files": 12,
+    "clean_files": 141,
+    "clear_rate": 90.4
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 8. FOOTER -->
+  <footer class="relative z-10 border-t border-slate-800/90 bg-[#050811] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-2.5">
+          <i data-lucide="shield-alert" class="w-5 h-5 text-cyan-400"></i>
+          <span class="font-display font-bold text-lg text-white">Ransomware <span class="text-cyan-400">Shield</span></span>
+          <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700">MIT License</span>
+        </div>
+        <p class="text-sm text-slate-400 mt-2">
+          Developed by <strong class="text-white">Rudranil Goswami</strong> &bull;
+          <a href="mailto:tatairudra39@gmail.com" class="text-cyan-400 hover:underline">tatairudra39@gmail.com</a>
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 text-sm font-medium">
+        <a href="https://github.com/rudra00434/Ransomware_Shield" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:border-cyan-400/50 hover:text-cyan-300 transition-all">
+          <i data-lucide="github" class="w-4 h-4"></i> GitHub Repository
+        </a>
+        <a href="https://youtu.be/UT3i6cZeBFA" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:border-rose-400/50 hover:text-rose-300 transition-all">
+          <i data-lucide="play-circle" class="w-4 h-4 text-rose-400"></i> Watch Demo Video
+        </a>
+        <a href="mailto:tatairudra39@gmail.com"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:border-emerald-400/50 hover:text-emerald-300 transition-all">
+          <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i> Contact Developer
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX MODAL FOR SCREENSHOTS -->
+  <div id="lightbox-modal" onclick="closeLightbox(event)" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="relative max-w-5xl w-full bg-[#0c1222] border border-slate-700 rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-800">
+        <div>
+          <h4 id="lightbox-title" class="font-display font-bold text-white text-base">Screenshot Title</h4>
+          <p id="lightbox-caption" class="text-xs text-slate-400">Caption</p>
+        </div>
+        <button type="button" onclick="closeLightbox()" aria-label="Close Lightbox" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="bg-slate-950 max-h-[78vh] overflow-auto flex items-center justify-center">
+        <img id="lightbox-img" src="" alt="Expanded Screenshot" class="w-full h-auto object-contain" />
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+  <script>
+    // Initialize Lucide Icons
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      updateSimulator();
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Toast Notification Helper (Replaces alert())
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      const toastMsg = document.getElementById('toast-message');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2800);
+    }
+
+    // Copy Code Block Helper using document.execCommand('copy') for iFrame/GitHub Pages reliability
+    function copyCodeBlock(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText;
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Commands copied to clipboard!');
+      } catch (err) {
+        showToast('Unable to copy automatically.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // ==========================================
+    // 1. THREAT SIMULATOR LOGIC
+    // ==========================================
+    const presets = {
+      ransomware: {
+        filename: 'invoice_2026.pdf.exe',
+        hash: 'e3b0c44298fc1c149afbf4c8996fb924...',
+        vt: 88,
+        yara: 85,
+        ml: 96,
+        staticScore: 90,
+        bonus: true,
+        indicators: [
+          { text: 'BCryptEncrypt', type: 'danger' },
+          { text: 'vssadmin delete shadows', type: 'danger' },
+          { text: 'FindFirstFileW', type: 'warn' },
+          { text: 'Entropy: 7.89 (Encrypted/Packed)', type: 'danger' },
+          { text: '.onion C2 String', type: 'danger' },
+          { text: 'Unsigned PE', type: 'warn' }
+        ],
+        aiSummary: 'CRITICAL RANSOMWARE ALERT: Binary masquerades as a PDF document while importing Windows Crypto APIs (BCryptEncrypt) and attempting Volume Shadow Copy deletion via vssadmin. Immediate action: Isolate host from network, terminate PID, and verify Honeyfile decoy integrity.'
+      },
+      dropper: {
+        filename: 'svchost_patch.exe',
+        hash: '7c4a8d09ca3762af61e59520943dc264...',
+        vt: 42,
+        yara: 55,
+        ml: 74,
+        staticScore: 68,
+        bonus: false,
+        indicators: [
+          { text: 'WriteProcessMemory', type: 'danger' },
+          { text: 'CreateRemoteThread', type: 'danger' },
+          { text: 'Packer: .upx0 / .upx1', type: 'warn' },
+          { text: 'IsDebuggerPresent', type: 'warn' },
+          { text: 'Unsigned PE', type: 'warn' }
+        ],
+        aiSummary: 'HIGH-RISK LOADER / DROPPER: Executable exhibits UPX section packing alongside cross-process memory injection APIs (WriteProcessMemory, CreateRemoteThread) and anti-debugging checks. Recommended action: Quarantine sample and inspect outbound port 8443/4444 socket telemetry.'
+      },
+      clean: {
+        filename: 'vlc-3.0.21-win64.exe',
+        hash: 'a4f92c118e3b70d45129c8e1104b9a32...',
+        vt: 0,
+        yara: 0,
+        ml: 2,
+        staticScore: 8,
+        bonus: false,
+        indicators: [
+          { text: 'Authenticode Verified (VideoLAN)', type: 'clean' },
+          { text: 'Normal Section Entropy (5.42)', type: 'clean' },
+          { text: '0 YARA Rule Hits', type: 'clean' },
+          { text: '0/72 VirusTotal Engines', type: 'clean' }
+        ],
+        aiSummary: 'CLEAN VERIFIED BINARY: Valid Authenticode digital signature confirmed with normal code/resource entropy distribution and zero suspicious Win32 crypto or injection imports. Safe for standard endpoint execution.'
+      }
+    };
+
+    let currentPresetKey = 'ransomware';
+
+    function loadPreset(key) {
+      const p = presets[key];
+      if (!p) return;
+      currentPresetKey = key;
+
+      document.getElementById('slider-vt').value = p.vt;
+      document.getElementById('slider-yara').value = p.yara;
+      document.getElementById('slider-ml').value = p.ml;
+      document.getElementById('slider-static').value = p.staticScore;
+      document.getElementById('toggle-ransom-bonus').checked = p.bonus;
+      document.getElementById('sim-filename').textContent = p.filename;
+      document.getElementById('sim-hash').textContent = p.hash;
+
+      // Update preset button active states
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.classList.remove('border-rose-500/50', 'bg-rose-500/10', 'border-amber-500/50', 'bg-amber-500/10', 'border-emerald-500/50', 'bg-emerald-500/10');
+        btn.classList.add('border-slate-800', 'bg-slate-900/60');
+      });
+      const activeBtn = document.getElementById('preset-' + key);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-slate-800', 'bg-slate-900/60');
+        if (key === 'ransomware') activeBtn.classList.add('border-rose-500/50', 'bg-rose-500/10');
+        if (key === 'dropper') activeBtn.classList.add('border-amber-500/50', 'bg-amber-500/10');
+        if (key === 'clean') activeBtn.classList.add('border-emerald-500/50', 'bg-emerald-500/10');
+      }
+
+      updateSimulator(p);
+    }
+
+    function updateSimulator(presetObj = null) {
+      const vt = parseInt(document.getElementById('slider-vt').value, 10);
+      const yara = parseInt(document.getElementById('slider-yara').value, 10);
+      const ml = parseInt(document.getElementById('slider-ml').value, 10);
+      const staticVal = parseInt(document.getElementById('slider-static').value, 10);
+      const hasBonus = document.getElementById('toggle-ransom-bonus').checked;
+
+      document.getElementById('val-vt').textContent = `${vt} / 100`;
+      document.getElementById('val-yara').textContent = `${yara} / 100`;
+      document.getElementById('val-ml').textContent = `${ml} / 100`;
+      document.getElementById('val-static').textContent = `${staticVal} / 100`;
+
+      // README Weighted Formula: VT(30%) + YARA(25%) + ML(25%) + Static(20%) + Ransomware Bonus(+20%)
+      let rawScore = (vt * 0.30) + (yara * 0.25) + (ml * 0.25) + (staticVal * 0.20);
+      if (hasBonus) rawScore += 20;
+      const finalScore = Math.min(100, Math.round(rawScore));
+
+      // Determine 5 Threat Levels: CLEAN -> LOW -> MEDIUM -> HIGH -> CRITICAL
+      let level = 'CLEAN';
+      let colorClass = 'text-emerald-400';
+      let barClass = 'bg-emerald-500';
+      let cardBorder = 'border-emerald-500/40 bg-emerald-500/10';
+
+      if (finalScore >= 80) {
+        level = 'CRITICAL';
+        colorClass = 'text-rose-400';
+        barClass = 'bg-rose-500';
+        cardBorder = 'border-rose-500/40 bg-rose-500/10';
+      } else if (finalScore >= 60) {
+        level = 'HIGH';
+        colorClass = 'text-orange-400';
+        barClass = 'bg-orange-500';
+        cardBorder = 'border-orange-500/40 bg-orange-500/10';
+      } else if (finalScore >= 35) {
+        level = 'MEDIUM';
+        colorClass = 'text-amber-400';
+        barClass = 'bg-amber-500';
+        cardBorder = 'border-amber-500/40 bg-amber-500/10';
+      } else if (finalScore >= 15) {
+        level = 'LOW';
+        colorClass = 'text-sky-400';
+        barClass = 'bg-sky-500';
+        cardBorder = 'border-sky-500/40 bg-sky-500/10';
+      }
+
+      const verdictBadge = document.getElementById('verdict-badge');
+      const verdictScore = document.getElementById('verdict-score');
+      const verdictBar = document.getElementById('verdict-bar');
+      const verdictCard = document.getElementById('verdict-card');
+
+      verdictBadge.textContent = level;
+      verdictBadge.className = `font-display font-extrabold text-2xl sm:text-3xl ${colorClass}`;
+      verdictScore.textContent = `Score: ${finalScore} / 100`;
+      verdictBar.style.width = `${finalScore}%`;
+      verdictBar.className = `h-full transition-all duration-300 ${barClass}`;
+      verdictCard.className = `p-5 rounded-xl border transition-all ${cardBorder}`;
+
+      // Render Indicators & AI Summary
+      const indicatorsContainer = document.getElementById('sim-indicators');
+      const aiSummaryEl = document.getElementById('sim-ai-summary');
+
+      if (presetObj) {
+        indicatorsContainer.innerHTML = presetObj.indicators.map(ind => {
+          const badgeStyle = ind.type === 'danger'
+            ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+            : ind.type === 'warn'
+              ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+              : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+          return `<span class="px-2.5 py-1 rounded-md text-[11px] font-mono border ${badgeStyle}">${ind.text}</span>`;
+        }).join('');
+        aiSummaryEl.textContent = presetObj.aiSummary;
+      } else {
+        // Dynamic custom slider indicators
+        const customBadges = [];
+        if (hasBonus) customBadges.push({ text: 'Ransomware Strings (+20%)', style: 'bg-rose-500/15 text-rose-300 border-rose-500/30' });
+        if (vt >= 50) customBadges.push({ text: `VT Detections: ${vt}%`, style: 'bg-rose-500/15 text-rose-300 border-rose-500/30' });
+        if (yara >= 50) customBadges.push({ text: `YARA Rule Hit (${yara}%)`, style: 'bg-purple-500/15 text-purple-300 border-purple-500/30' });
+        if (ml >= 60) customBadges.push({ text: `Ensemble ML Malicious (${ml}%)`, style: 'bg-amber-500/15 text-amber-300 border-amber-500/30' });
+        if (staticVal >= 60) customBadges.push({ text: `High PE Entropy / APIs (${staticVal}%)`, style: 'bg-amber-500/15 text-amber-300 border-amber-500/30' });
+        if (customBadges.length === 0) customBadges.push({ text: 'No Malicious Indicators Triggered', style: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' });
+
+        indicatorsContainer.innerHTML = customBadges.map(b =>
+          `<span class="px-2.5 py-1 rounded-md text-[11px] font-mono border ${b.style}">${b.text}</span>`
+        ).join('');
+
+        aiSummaryEl.textContent = finalScore >= 60
+          ? `${level} THREAT DETECTED (Score ${finalScore}/100): Multi-engine consensus flags anomalous PE behavior and elevated malicious confidence. Recommend immediate quarantine, zero-overwrite cleanup, and process tree inspection.`
+          : `${level} RISK PROFILE (Score ${finalScore}/100): Weighted telemetry remains below critical ransomware thresholds. Continue passive Honeyfile and socket monitoring.`;
+      }
+    }
+
+    // ==========================================
+    // 2. ARCHITECTURE INSPECTOR LOGIC
+    // ==========================================
+    const archDetails = {
+      frontend: {
+        badge: 'FRONTEND LAYER',
+        title: 'React 18 SOC Frontend Interface',
+        desc: 'Built with React 18, Vite, and Tailwind CSS to deliver a responsive Security Operations Center dashboard. Uses Zustand for low-overhead global alert state, Recharts for 7-day threat timelines, and React Markdown with syntax highlighting for ChatGPT-style AI threat explanations.',
+        tags: ['React 18', 'Vite', 'Tailwind CSS', 'Zustand', 'React Router v6', 'Recharts', 'Lucide React', 'React Markdown'],
+        flow: 'UI -> POST /api/scanner/upload/ -> Polls /jobs/<id>/ & subscribes to ws/alerts/'
+      },
+      gateway: {
+        badge: 'API & WEBSOCKETS',
+        title: 'Django 4.2 API Gateway & Channels (Daphne)',
+        desc: 'Serves RESTful endpoints with SimpleJWT authentication and role-based rate limiting (20 req/min anonymous, 100 req/min authenticated). ASGI Daphne server powers bidirectional WebSockets for instant Honeyfile and ARP Spoofing alerts.',
+        tags: ['Django 4.2+', 'Django REST Framework', 'Django Channels', 'Daphne ASGI', 'SimpleJWT', 'SQLite3 / PostgreSQL'],
+        flow: 'DRF -> Validates Magic Bytes -> Dispatches Celery Job via Redis -> Streams WS Alerts'
+      },
+      engines: {
+        badge: 'ASYNC SCAN PIPELINE',
+        title: 'Parallel Celery Analysis Engines & Groq AI',
+        desc: 'Celery background workers execute four independent inspection engines with strict 4m soft / 5m hard timeouts, compute the normalized threat score, invoke Groq (LLaMA 3.1) for human-readable remediation, and securely zero-overwrite temporary files.',
+        tags: ['Celery', 'Redis', 'pefile', 'blake3', 'yara-python', 'scikit-learn', 'virustotal3', 'langchain-groq'],
+        flow: 'Celery -> [Static PE + YARA + Ensemble ML + VT] -> Weighted Score -> Groq LLaMA 3.1'
+      },
+      daemons: {
+        badge: 'ENDPOINT TELEMETRY',
+        title: 'Real-Time Honeyfile Watchdog & Network Intel',
+        desc: 'Continuous endpoint protection daemons. The Honeyfile service monitors decoy files via watchdog and attributes modifications to exact PIDs via psutil. The Network Monitor enriches active sockets with GeoLite2, Emerging Threats IP feeds, beaconing CV analysis, and ARP MitM detection.',
+        tags: ['watchdog', 'psutil', 'geoip2 (MaxMind)', 'aiohttp', 'Emerging Threats Feed', 'ARP Spoof Detector'],
+        flow: 'OS File/Socket Event -> PID Attribution & Risk Scoring -> Daphne Channels -> React Alert'
+      }
+    };
+
+    function selectArchNode(key) {
+      const data = archDetails[key];
+      if (!data) return;
+
+      document.querySelectorAll('.arch-node').forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById('node-' + key);
+      if (activeEl) activeEl.classList.add('active');
+
+      document.getElementById('arch-badge').textContent = data.badge;
+      document.getElementById('arch-title').textContent = data.title;
+      document.getElementById('arch-desc').textContent = data.desc;
+      document.getElementById('arch-flow').textContent = data.flow;
+      document.getElementById('arch-tags').innerHTML = data.tags.map(t =>
+        `<span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-900 text-cyan-300 border border-slate-700">${t}</span>`
+      ).join('');
+    }
+
+    // Initialize default architecture tags
+    selectArchNode('frontend');
+
+    // ==========================================
+    // 3. INSTALLATION & API TABS LOGIC
+    // ==========================================
+    function switchInstallTab(tabKey) {
+      document.querySelectorAll('.inst-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.inst-tab').forEach(t => {
+        t.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border', 'border-cyan-400/40');
+        t.classList.add('text-slate-400');
+      });
+
+      document.getElementById('inst-panel-' + tabKey).classList.remove('hidden');
+      const activeTab = document.getElementById('inst-tab-' + tabKey);
+      activeTab.classList.remove('text-slate-400');
+      activeTab.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border', 'border-cyan-400/40');
+    }
+
+    function switchApiTab(tabKey) {
+      document.querySelectorAll('.api-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.api-tab').forEach(t => {
+        t.classList.remove('bg-purple-500/20', 'text-purple-300', 'border', 'border-purple-400/40');
+        t.classList.add('text-slate-400');
+      });
+
+      document.getElementById('api-panel-' + tabKey).classList.remove('hidden');
+      const activeTab = document.getElementById('api-tab-' + tabKey);
+      activeTab.classList.remove('text-slate-400');
+      activeTab.classList.add('bg-purple-500/20', 'text-purple-300', 'border', 'border-purple-400/40');
+    }
+
+    // ==========================================
+    // 4. LIGHTBOX MODAL LOGIC
+    // ==========================================
+    function openLightbox(imgUrl, title, caption) {
+      const modal = document.getElementById('lightbox-modal');
+      document.getElementById('lightbox-img').src = imgUrl;
+      document.getElementById('lightbox-title').textContent = title;
+      document.getElementById('lightbox-caption').textContent = caption;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightbox-modal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
